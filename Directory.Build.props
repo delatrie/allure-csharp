@@ -21,10 +21,18 @@
         <PackageReleaseNotes>https://github.com/allure-framework/allure-csharp/releases/tag/2.12.1</PackageReleaseNotes>
     </PropertyGroup>
 
-    <!-- Signing properties -->
-    <PropertyGroup>
-        <SignAssembly>false</SignAssembly>
-        <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)key.snk</AssemblyOriginatorKeyFile>
+    <!-- Signing properties (Windows-only) -->
+    <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)build/identity-key-public.snk</AssemblyOriginatorKeyFile>
+
+        <!-- Allows assemblies to behave like they are strong named even after AspectInjector modifies them.
+         This mode has some limitations (see https://github.com/dotnet/runtime/blob/main/docs/project/public-signing.md).
+         We're using it as a fallback in case sn.exe is not found on the machine to make it easier for developers to
+         work with the project.
+         Since we do the publishing on a Windows runner, the assemblies published to NuGet are always
+         strong named. -->
+        <PublicSign>true</PublicSign>
     </PropertyGroup>
 
     <!-- Debug properties -->
