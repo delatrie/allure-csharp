@@ -1,9 +1,8 @@
-name: Build
+name: Test
 
 env:
   SOLUTION_PATH: allure-csharp.sln
   BUILD_CONFIGURATION: 'Release'
-  PACKAGE_OUTPUT_PATH: 'artifacts'
 
 on:
   workflow_dispatch:
@@ -19,8 +18,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    name: "Build"
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
