@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,16 +29,12 @@ jobs:
         run: |
           dotnet restore ${{ env.SOLUTION_PATH }}
 
-      # Use AspectInjector 2.8.2 which, unlike 2.8.1, correctly sets PdbChecksum
-      # The only reason we're still referencing 2.8.1 from projects is that
-      # 2.8.2 doesn't work well on Mac OS ARM
       - name: 'Build project using dotnet'
         run: |
           dotnet build ${{ env.SOLUTION_PATH }}\
             --no-restore\
             --configuration ${{ env.BUILD_CONFIGURATION }}\
-            -p:ContinuousIntegrationBuild=true\
-            "-p:AspectInjector_Location=${{ github.workspace }}/build/AspectInjector/linux-x64/AspectInjector"
+            -p:ContinuousIntegrationBuild=true
 
       - name: 'Pack project'
         run: |
