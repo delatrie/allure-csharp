@@ -42,6 +42,7 @@ jobs:
             --no-restore\
             --no-build\
             --configuration ${{ env.BUILD_CONFIGURATION }}\
+            "-p:PackageReleaseNotes=${{ github.event.release.html_url }}"\
             "-p:PackageOutputPath=${{ github.workspace }}/${{ env.PACKAGE_OUTPUT_PATH }}"
 
       - name: 'NuGet publish'
