@@ -18,7 +18,6 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageTags>allure</PackageTags>
-        <PackageReleaseNotes>https://github.com/allure-framework/allure-csharp/releases/tag/2.12.1</PackageReleaseNotes>
     </PropertyGroup>
 
     <!-- Signing properties (Windows-only) -->
