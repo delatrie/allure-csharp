@@ -1,0 +1,51 @@
+name: Test
+
+env:
+  SOLUTION_PATH: allure-csharp.sln
+  BUILD_CONFIGURATION: 'Release'
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  test-win:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 'Setup .NET Core SDK'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            3.1.x
+            8.0.x
+
+      - name: 'Restore packages'
+        run: |
+          dotnet restore ${{ env.SOLUTION_PATH }}
+
+      - name: Find sn.exe
+        id: find-sn-exe
+        run: |
+          $SnExe = ./build/findvstool.ps1 -ToolName 'sn.exe'
+          "snexe=$SnExe" >> $GITHUB_OUTPUT
+
+      - name: 'Build project using dotnet'
+        run: |
+          dotnet build ${{ env.SOLUTION_PATH }}\
+            --no-restore\
+            --configuration ${{ env.BUILD_CONFIGURATION }}\
+            "-p:SnExe=${{ steps.find-sn-exe.outputs.snexe }}"
+
+      - name: Validate assemblies
+        run: |
+          $SnExe = "${{ steps.find-sn-exe.outputs.snexe }}"
+          & $SnExe -vf ./Allure.Net.Commons/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.Net.Commons.dll
+          & $SnExe -vf ./Allure.NUnit/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.NUnit.dll
+          & $SnExe -vf ./Allure.NUnit.Examples/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.NUnit.Examples.dll
+          & $SnExe -vf ./Allure.Reqnroll/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.Reqnroll.dll
+          & $SnExe -vf ./Allure.Reqnroll.Tests/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.Reqnroll.Tests.dll
+          & $SnExe -vf ./Allure.Reqnroll.Tests.Samples/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.Reqnroll.Tests.Samples.dll
