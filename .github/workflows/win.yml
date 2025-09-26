@@ -36,10 +36,15 @@ jobs:
 
       - name: 'Build project using dotnet'
         run: |
-          dotnet build ${{ env.SOLUTION_PATH }} -v:diag`
+          dotnet build ${{ env.SOLUTION_PATH }} -v:diag -bl `
             --no-restore `
             --configuration ${{ env.BUILD_CONFIGURATION }} `
             "-p:SnExe=${{ steps.find-sn-exe.outputs.snexe }}"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          path: msbuild.binlog
 
       - name: Validate assemblies
         run: |
