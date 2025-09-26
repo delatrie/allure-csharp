@@ -31,6 +31,7 @@ jobs:
         id: find-sn-exe
         run: |
           $SnExe = ./build/findvstool.ps1 -ToolName 'sn.exe'
+          $SnExe
           "snexe=$SnExe" >> $GITHUB_OUTPUT
 
       - name: 'Build project using dotnet'
