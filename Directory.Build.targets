@@ -72,6 +72,6 @@
                 And '$(AssemblyTimestampBeforeCompile)' != '$(AssemblyTimestampAfterAspectInjection)' "
             AfterTargets="AspectInjector_InjectAspects"
             BeforeTargets="_TimeStampAfterCompile;AfterCompile">
-        <Exec Command="'$(SnExe)' -Ra @(IntermediateAssembly->'%(FullPath)') '$(AssemblyOriginatorKeyFile)'" />
+        <Exec Command="'$(SnExe)' -R '%(IntermediateAssembly.FullPath)' '$(AssemblyOriginatorKeyFile)'" />
     </Target>
 </Project>
