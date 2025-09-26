@@ -36,7 +36,7 @@ jobs:
 
       - name: 'Build project using dotnet'
         run: |
-          dotnet build ${{ env.SOLUTION_PATH }} `
+          dotnet build ${{ env.SOLUTION_PATH }} -v:diag`
             --no-restore `
             --configuration ${{ env.BUILD_CONFIGURATION }} `
             "-p:SnExe=${{ steps.find-sn-exe.outputs.snexe }}"
