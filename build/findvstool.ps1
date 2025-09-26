@@ -1,5 +1,9 @@
 [CmdletBinding()]
-Param ([string] $ToolName)
+Param
+(
+    [Parameter(Mandatory = $True)]
+    [string] $ToolName
+)
 
 If (-not $IsWindows)
 {
