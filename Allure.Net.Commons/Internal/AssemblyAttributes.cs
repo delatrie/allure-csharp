@@ -12,7 +12,6 @@
     "986A5E670B69857D6BA01D61C43749132080" +
     "BF8091D435E75F528E2A2C35EC34CBA0"
 )]
-[assembly: InternalsVisibleTo("Allure.Net.Commons.Tests")]
 [assembly: InternalsVisibleTo(
     "DynamicProxyGenAssembly2, PublicKey=" +
         "00240000048000009400000006020000" +
@@ -26,4 +25,3 @@
         "EAF74C4861EFF62ABF69B9291ED0A340" +
         "E113BE11E6A7D3113E92484CF7045CC7"
 )]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
