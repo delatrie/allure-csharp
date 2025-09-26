@@ -48,4 +48,30 @@
             </_PackageFiles>
         </ItemGroup>
     </Target>
+
+    <Target Name="SetAssemblyTimestampBeforeCompile"
+            AfterTargets="PrepareForBuild"
+            BeforeTargets="CoreCompile">
+        <PropertyGroup>
+            <AssemblyTimestampBeforeCompile>%(IntermediateAssembly.ModifiedTime)</AssemblyTimestampBeforeCompile>
+        </PropertyGroup>
+    </Target>
+
+    <Target Name="SetAssemblyTimestampAfterAspectInjection"
+            AfterTargets="AspectInjector_InjectAspects"
+            BeforeTargets="CompleteAssemblySignature">
+        <PropertyGroup>
+            <AssemblyTimestampAfterAspectInjection>%(IntermediateAssembly.ModifiedTime)</AssemblyTimestampAfterAspectInjection>
+        </PropertyGroup>
+    </Target>
+
+    <Target Name="CompleteAssemblySignature"
+            Condition=" $(OS)' == 'Windows_NT'
+                And '$(SignAssembly)' == 'true'
+                And '$(SnExe)' != ''
+                And '$(AssemblyTimestampBeforeCompile)' != '$(AssemblyTimestampAfterAspectInjection)' "
+            AfterTargets="AspectInjector_InjectAspects"
+            BeforeTargets="_TimeStampAfterCompile;AfterCompile">
+        <Exec Command="'$(SnExe)' -Ra @(IntermediateAssembly->'%(FullPath)') '$(AssemblyOriginatorKeyFile)'" />
+    </Target>
 </Project>
