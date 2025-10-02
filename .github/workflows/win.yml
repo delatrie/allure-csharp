@@ -36,7 +36,7 @@ jobs:
 
       - name: 'Build project using dotnet'
         run: |
-          dotnet build ${{ env.SOLUTION_PATH }} -v:diag -bl `
+          dotnet build ${{ env.SOLUTION_PATH }} `
             --no-restore `
             --configuration ${{ env.BUILD_CONFIGURATION }} `
             "-p:SnExe=${{ steps.find-sn-exe.outputs.snexe }}"
@@ -50,8 +50,9 @@ jobs:
         run: |
           $SnExe = "${{ steps.find-sn-exe.outputs.snexe }}"
           & $SnExe -vf ./Allure.Net.Commons/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.Net.Commons.dll
+          & $SnExe -vf ./Allure.Net.Commons.Tests/bin/${{ env.BUILD_CONFIGURATION }}/net8.0/Allure.Net.Commons.Tests.dll
           & $SnExe -vf ./Allure.NUnit/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.NUnit.dll
-          & $SnExe -vf ./Allure.NUnit.Examples/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.NUnit.Examples.dll
-          & $SnExe -vf ./Allure.Reqnroll/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.Reqnroll.dll
-          & $SnExe -vf ./Allure.Reqnroll.Tests/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.Reqnroll.Tests.dll
-          & $SnExe -vf ./Allure.Reqnroll.Tests.Samples/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.Reqnroll.Tests.Samples.dll
+          & $SnExe -vf ./Allure.NUnit.Examples/bin/${{ env.BUILD_CONFIGURATION }}/net8.0/Allure.NUnit.Examples.dll
+          & $SnExe -vf ./Allure.Reqnroll/bin/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/Allure.ReqnrollPlugin.dll
+          & $SnExe -vf ./Allure.Reqnroll.Tests/bin/${{ env.BUILD_CONFIGURATION }}/net8.0/Allure.Reqnroll.Tests.dll
+          & $SnExe -vf ./Allure.Reqnroll.Tests.Samples/bin/${{ env.BUILD_CONFIGURATION }}/net8.0/Allure.Reqnroll.Tests.Samples.dll
