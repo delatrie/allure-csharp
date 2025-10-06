@@ -36,6 +36,7 @@ jobs:
         shell: pwsh
         run: |
           $SnExeLocation = ./build/findvstool.ps1 -ToolName 'sn.exe'
+          Write-Host "Found '$SnExeLocation'"
           "path=$SnExeLocation" >> $Env:GITHUB_OUTPUT
 
       - name: 'Build project using dotnet'
@@ -51,7 +52,7 @@ jobs:
         shell: pwsh
         run: |
           $SnExe = "${{ steps.find-snexe.outputs.path }}"
-          Get-ChildItem "./*/bin/${{ env.BUILD_CONFIGURATION }}/*/Allure.*.dll" -Exclude "Allure.SpecFlow*","Allure.Xunit*" | ForEach-Object {
+          Get-ChildItem "./*/bin/*/*/Allure.*.dll" -Exclude "Allure.SpecFlow*","Allure.Xunit*" | ForEach-Object {
             & $SnExe -vf $_.FullName
           }
 
