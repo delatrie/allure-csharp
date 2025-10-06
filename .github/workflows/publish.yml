@@ -6,6 +6,7 @@ env:
   PACKAGE_OUTPUT_PATH: 'artifacts'
 
 on:
+  workflow_dispatch: {}
   release:
     types: [ published ]
 
@@ -64,11 +65,6 @@ jobs:
             "-p:PackageReleaseNotes=${{ github.event.release.html_url }}" `
             "-p:PackageOutputPath=${{ github.workspace }}/${{ env.PACKAGE_OUTPUT_PATH }}"
 
-      - name: 'NuGet publish'
-        shell: pwsh
-        run: |
-          dotnet nuget push "${{ env.PACKAGE_OUTPUT_PATH }}/*.nupkg" `
-            -k ${NUGET_TOKEN} `
-            -s https://api.nuget.org/v3/index.json
-        env:
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ${{ github.workspace }}/${{ env.PACKAGE_OUTPUT_PATH }}
