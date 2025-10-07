@@ -24,26 +24,16 @@ The adapter works with [SpecFlow](http://specflow.org/) version 3, starting from
 1. Install the [Allure.SpecFlow](https://www.nuget.org/packages/Allure.SpecFlow)
 Nuget package according to your SpecFlow version.
 2. Add the following entry to your `specflow.json`:
-    ```json
-    {
-      "stepAssemblies": [
-        {"assembly": "Allure.SpecFlowPlugin"}
-      ]
-    }
-    ```
+
+   ```json
+   {
+     "stepAssemblies": [
+       { "assembly": "Allure.SpecFlowPlugin" }
+     ]
+   }
+   ```
+
 3. Run the tests.
-
-#### For users of Mac with Apple silicon
-
-If you're developing on a Mac machine with Apple silicon, make sure you have
-Rosetta installed. Follow this article for the instructions:
-https://support.apple.com/en-us/HT211861
-
-You may also install Rosetta via the CLI:
-
-```shell
-/usr/sbin/softwareupdate --install-rosetta --agree-to-license
-```
 
 ### Further readings
 

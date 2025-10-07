@@ -18,13 +18,12 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageTags>allure</PackageTags>
-        <PackageReleaseNotes>https://github.com/allure-framework/allure-csharp/releases/tag/2.12.1</PackageReleaseNotes>
     </PropertyGroup>
 
     <!-- Signing properties -->
     <PropertyGroup>
-        <SignAssembly>false</SignAssembly>
-        <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)key.snk</AssemblyOriginatorKeyFile>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>$([System.IO.Path]::Combine($(MSBuildThisFileDirectory), 'build', 'identity.snk'))</AssemblyOriginatorKeyFile>
     </PropertyGroup>
 
     <!-- Debug properties -->

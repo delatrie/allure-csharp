@@ -13,8 +13,8 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  publish:
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -26,32 +26,50 @@ jobs:
             6.0.x
 
       - name: 'Restore packages'
+        shell: pwsh
         run: |
           dotnet restore ${{ env.SOLUTION_PATH }}
 
-      # Use AspectInjector 2.8.2 which, unlike 2.8.1, correctly sets PdbChecksum
-      # The only reason we're still referencing 2.8.1 from projects is that
-      # 2.8.2 doesn't work well on Mac OS ARM
-      - name: 'Build project using dotnet'
+      - name: 'Resolve sn.exe location'
+        id: find-snexe
+        shell: pwsh
         run: |
-          dotnet build ${{ env.SOLUTION_PATH }}\
-            --no-restore\
-            --configuration ${{ env.BUILD_CONFIGURATION }}\
-            -p:ContinuousIntegrationBuild=true\
-            "-p:AspectInjector_Location=${{ github.workspace }}/build/AspectInjector/linux-x64/AspectInjector"
+          $SnExeLocation = ./build/findvstool.ps1 -ToolName 'sn.exe'
+          Write-Host "Found '$SnExeLocation'"
+          "path=$SnExeLocation" >> $Env:GITHUB_OUTPUT
+
+      - name: 'Build project using dotnet'
+        shell: pwsh
+        run: |
+          dotnet build ${{ env.SOLUTION_PATH }} `
+            --no-restore `
+            --configuration ${{ env.BUILD_CONFIGURATION }} `
+            -p:ContinuousIntegrationBuild=true `
+            "-p:Allure_SnExePath=${{ steps.find-snexe.outputs.path }}"
+
+      - name: Verify assembly strong names
+        shell: pwsh
+        run: |
+          $SnExe = "${{ steps.find-snexe.outputs.path }}"
+          Get-ChildItem "./*/bin/*/*/Allure.*.dll" -Exclude "Allure.SpecFlow*","Allure.Xunit*" | ForEach-Object {
+            & $SnExe -vf $_.FullName
+          }
 
       - name: 'Pack project'
+        shell: pwsh
         run: |
-          dotnet pack ${{ env.SOLUTION_PATH }}\
-            --no-restore\
-            --no-build\
-            --configuration ${{ env.BUILD_CONFIGURATION }}\
+          dotnet pack ${{ env.SOLUTION_PATH }} `
+            --no-restore `
+            --no-build `
+            --configuration ${{ env.BUILD_CONFIGURATION }} `
+            "-p:PackageReleaseNotes=${{ github.event.release.html_url }}" `
             "-p:PackageOutputPath=${{ github.workspace }}/${{ env.PACKAGE_OUTPUT_PATH }}"
 
       - name: 'NuGet publish'
+        shell: pwsh
         run: |
-          dotnet nuget push "${{ env.PACKAGE_OUTPUT_PATH }}/*.nupkg"\
-            -k ${NUGET_TOKEN}\
+          dotnet nuget push "${{ env.PACKAGE_OUTPUT_PATH }}/*.nupkg" `
+            -k ${NUGET_TOKEN} `
             -s https://api.nuget.org/v3/index.json
         env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}

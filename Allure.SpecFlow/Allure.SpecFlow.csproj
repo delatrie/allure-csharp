@@ -11,6 +11,7 @@
         <Description>Create beautiful reports from your SpecFlow tests.</Description>
         <PackageIcon>Allure-SF-Color.png</PackageIcon>
         <PackageTags>$(PackageTags) specflow</PackageTags>
+        <SignAssembly>false</SignAssembly>
     </PropertyGroup>
 
     <ItemGroup>
