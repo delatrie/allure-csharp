@@ -95,8 +95,7 @@ We rely on Harmony (which in turn uses MonoMod.Core) to:
 1. Report arguments of theories in case they aren't reported by xUnit.net itself.
 2. Implement selectie run (test plans).
 
-Those features are unavailable on ARM64 due to limitations of MonoMod.Core.
-Additionally, they might not work in some other rare circumstances.
+Those features might not work in some rare circumstances, especially when testing the `Release` configuration. If you're affected, try switching to `Debug` as a workaround.
 
 Issue [#369] contains some additional details.
 
@@ -138,11 +137,14 @@ dotnet test -s <path-to-runsettings> <test-project-name>
 Check the test logs. If Allure.Xunit has run, the following entry should exist:
 
 ```
-[xUnit.net 00:00:00.53] Allure reporter enabled
+[xUnit.net 00:00:00.53] Allure.Xunit: Allure reporter enabled
 ```
 
-> You might need to increase the verbosity level with `--verbosity=detailed` to
-> see xUnit.net's logs.
+> If you don't see xUnit.net logs, try increasing the verbosity level to `normal` or `detailed`:
+>
+> ```
+> dotnet test --logger 'console;verbosity=normal'
+> ```
 
 ### How to run Allure.Xunit together with another reporter?
 
