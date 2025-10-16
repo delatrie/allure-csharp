@@ -20,10 +20,11 @@ namespace Allure.Net.Commons.Configuration
 
         public string Title { get; init; }
         public string Directory { get; init; } = AllureConstants.DEFAULT_RESULTS_FOLDER;
-        public HashSet<string> Links { get; } = new HashSet<string>();
+        public HashSet<string> Links { get; } = [];
         public List<string> FailExceptions { get; set; }
         public bool UseLegacyIds { get; set; } = false;
         public bool IndentOutput { get; set; } = false;
+        public Dictionary<string, string> GlobalLabels { get; set; } = [];
 
         public static AllureConfiguration ReadFromJObject(JObject jObject)
         {
