@@ -72,8 +72,8 @@ jobs:
       - name: 'NuGet publish'
         shell: pwsh
         run: |
-          dotnet nuget push "${{ env.PACKAGE_OUTPUT_PATH }}\*.nupkg" `
-            --api-key "$Env:NUGET_TOKEN" `
-            --source "https://api.nuget.org/v3/index.json"
-        env:
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          Get-ChildItem '${{ github.workspace }}/${{ env.PACKAGE_OUTPUT_PATH }}'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ${{ env.PACKAGE_OUTPUT_PATH }}
